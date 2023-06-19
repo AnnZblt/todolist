@@ -7,7 +7,7 @@ import {
 export const createTitle = () => {
   const h3 = document.createElement('h3');
 
-  h3.textContent = 'Todo list';
+  h3.textContent = 'Это твой список дел, ';
 
   return h3;
 };
@@ -158,6 +158,11 @@ export const createRow = ({
     },
   ]);
   tdActions.append(...buttonGroup.btns);
+
+  if (status === 'Выполнено') {
+    buttonGroup.btns[1].disabled = true;
+    buttonGroup.btns[2].disabled = true;
+  }
 
   tr.append(tdIndex, tdTask, tdStatus, tdActions);
 

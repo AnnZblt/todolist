@@ -51,40 +51,47 @@ export const deleteControl = (list, username) => {
 export const completeControl = (list, username) => {
   list.addEventListener('click', event => {
     const target = event.target;
+    if (target.closest('.todolist-item')
+      .classList.contains('table-success')) {
+      return;
+    }
+
     if (target.closest('.btn-success')) {
-      const data = getStorage(username);
-      if (target.closest('.todolist-item')
-        .classList.contains('table-success')) {
-        return;
-      }
+      const completeConfirm =
+        confirm('Действительно хочешь завершить эту задачу?');
+      if (completeConfirm) {
+        const data = getStorage(username);
 
-      target.closest('.todolist-item').classList.remove('table-warning');
-      target.closest('.todolist-item').classList.remove('table-danger');
-      target.closest('.todolist-item').classList.remove('table-light');
-      target.closest('.todolist-item').classList.add('table-success');
-      target.closest('.todolist-item').children[1]
-        .classList.add('text-decoration-line-through');
+        target.closest('.todolist-item').classList.remove('table-warning');
+        target.closest('.todolist-item').classList.remove('table-danger');
+        target.closest('.todolist-item').classList.remove('table-light');
+        target.closest('.todolist-item').classList.add('table-success');
+        target.closest('.todolist-item').children[1]
+          .classList.add('text-decoration-line-through');
 
-      const completeTaskId = target.closest('.todolist-item').dataset.id;
-      const task = data.find(item => item.id === completeTaskId);
-      if (task) {
-        task.status = 'Выполнено';
-        setStorage(data, username);
+        const completeTaskId = target.closest('.todolist-item').dataset.id;
+        const task = data.find(item => item.id === completeTaskId);
+        if (task) {
+          task.status = 'Выполнено';
+          setStorage(data, username);
+        }
+        target.closest('.todolist-item').children[2].textContent = 'Выполнено';
+        delete target.closest('.todolist-item').dataset.priority;
       }
-      target.closest('.todolist-item').children[2].textContent = 'Выполнено';
-      delete target.closest('.todolist-item').dataset.priority;
     }
   });
 };
 
 export const formControl = (form) => {
-  form.addEventListener('change', event => {
-    if (form.task.value !== null && form.task.value.trim() !== '') {
+  const taskInput = form.task;
+  taskInput.addEventListener('input', event => {
+    if (taskInput.value !== null && taskInput.value.trim() !== '') {
       form.elements[2].disabled = false;
       form.priority.required = true;
+    } else {
+      form.elements[2].disabled = true;
     }
   });
-
   form.addEventListener('click', event => {
     if (event.target === form.elements[3]) {
       form.elements[2].disabled = true;
@@ -118,6 +125,7 @@ export const editControl = (list, username) => {
         updateStorage(listItem.dataset.id, editedTodo, username);
       } else {
         task.contentEditable = 'true';
+        task.focus();
         editButton.textContent = 'Применить';
         task.classList.add('editing');
       }

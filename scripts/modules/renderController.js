@@ -35,5 +35,6 @@ export const renderTodoList = () => {
     form,
     overlay,
     greetingForm,
+    title,
   };
 };

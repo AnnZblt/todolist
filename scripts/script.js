@@ -20,12 +20,14 @@ const init = async () => {
     form,
     overlay,
     greetingForm,
+    title,
   } = todoList;
   const userData = await getUserName(overlay, greetingForm);
   const {
     username,
   } = userData;
   const taskList = getStorage(username);
+  title.append(username);
 
 
   getTaskIndex(taskList);

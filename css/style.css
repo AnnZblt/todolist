@@ -83,7 +83,8 @@
 }
 
 .btn-warning:active,
-.btn-warning:focus {
+.btn-warning:focus,
+.btn-warning:disabled {
   color: #fff;
 }
 
